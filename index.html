@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>$LFG — Little Finger Guy</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@vercel/geist@1.0.0/style.css">
+
+    <style>
+        :root {
+            --bg: #F3F2FB;
+            --accent: #6E66FF;
+            --text: #1a1a1a;
+            --muted: #666;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Geist", system-ui, sans-serif;
+        }
+
+        body {
+            background: #F3F2FB;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 26px 40px;
+            z-index: 20;
+        }
+
+        .menu {
+            display: flex;
+            gap: 12px;
+        }
+
+        .menu a {
+            font-family: "Geist Mono", monospace;
+            font-size: 12px;
+            text-decoration: none;
+            color: #333;
+            background: white;
+            padding: 10px 18px;
+            border-radius: 10px;
+            box-shadow: 0 5px 14px rgba(0, 0, 0, 0.05);
+            transition: .2s;
+            cursor: pointer;
+        }
+
+        .menu a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            background-color: #00ff9c;
+            cursor: auto !important;
+        }
+
+        /* PARALLAX BUBBLES */
+
+        .bubbles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .bubble {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: .35;
+            animation: floatBubble linear infinite;
+        }
+
+        @keyframes floatBubble {
+            from {
+                transform: translateY(100vh)
+            }
+
+            to {
+                transform: translateY(-120vh)
+            }
+        }
+
+        /* HERO */
+
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .hero img {
+            width: 420px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: 1s ease;
+        }
+
+        .hero.show img {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero h1 {
+            margin-top: 20px;
+            font-size: clamp(4rem, 12vw, 7rem);
+            letter-spacing: -2px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: 1s ease;
+        }
+
+        .hero.show h1 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero p {
+            margin-top: 16px;
+            font-family: "Geist Mono", monospace;
+            color: var(--muted);
+        }
+
+        /* SECTIONS */
+
+        .section {
+            max-width: 1100px;
+            margin: 180px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .section img {
+            width: 400px;
+            animation: floatImg 6s ease-in-out infinite;
+        }
+
+        @keyframes floatImg {
+            0% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-10px)
+            }
+
+            100% {
+                transform: translateY(0)
+            }
+        }
+
+        .section-text {
+            font-size: 34px;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+
+        .section-text small {
+            display: block;
+            margin-top: 14px;
+            font-family: "Geist Mono", monospace;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .highlight {
+            font-size: 42px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        /* TERMINAL */
+
+        .terminal {
+            max-width: 800px;
+            margin: 160px auto;
+            background: #111;
+            color: #00ff9c;
+            padding: 30px;
+            border-radius: 16px;
+            font-family: "Geist Mono", monospace;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, .2);
+        }
+
+        .terminal h3 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .terminal-line {
+            margin-bottom: 10px;
+        }
+
+        .terminal-input {
+            margin-top: 20px;
+        }
+
+        .terminal button {
+            margin-top: 10px;
+            padding: 10px 18px;
+            background: #6E66FF;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* TWITTER */
+
+        .twitter {
+            margin: 160px auto;
+            text-align: center;
+            max-width: 700px;
+            padding: 60px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .08);
+            position: relative;
+        }
+
+        .twitter h2 {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        .twitter p {
+            color: var(--muted);
+            font-family: "Geist Mono", monospace;
+        }
+
+        .twitter a {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 16px 36px;
+            background: #6E66FF;
+            color: white;
+            border-radius: 14px;
+            text-decoration: none;
+            font-family: "Geist Mono", monospace;
+            box-shadow: 0 14px 40px rgba(110, 102, 255, .4);
+            transition: .25s;
+        }
+
+        .twitter a:hover {
+            transform: translateY(-4px) scale(1.05);
+        }
+
+        /* FLOATING LFG */
+
+        .lfg-float {
+            position: absolute;
+            font-size: 28px;
+            animation: lfgFloat 4s infinite ease-in-out;
+        }
+
+        @keyframes lfgFloat {
+            0% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-10px)
+            }
+
+            100% {
+                transform: translateY(0)
+            }
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            padding: 80px 20px;
+            font-family: "Geist Mono", monospace;
+            color: #777;
+        }
+
+        @media(max-width:900px) {
+
+            .section {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero img {
+                width: 280px;
+                border-radius: 50px;
+            }
+
+        }
+
+        .section-text {
+            letter-spacing: -0.02em;
+        }
+
+        .about-lfg {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px 50px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .06);
+        }
+
+        .about-lfg h2 {
+            margin-bottom: 16px;
+            font-size: 28px;
+        }
+
+        .about-lfg p {
+            font-family: "Geist Mono", monospace;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* HERO GLOW */
+
+        .hero-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(110, 102, 255, 0.35) 0%, rgba(110, 102, 255, 0.12) 40%, transparent 70%);
+            filter: blur(40px);
+            z-index: -1;
+            animation: glowPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+
+            0% {
+                transform: scale(0.9);
+                opacity: .6;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: .9;
+            }
+
+            100% {
+                transform: scale(0.9);
+                opacity: .6;
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="bubbles"></div>
+
+    <header>
+
+        <div></div>
+
+        <div class="menu">
+            <a href="#about">About</a>
+            <a href="#terminal">TERMINAL</a>
+            <a href="x.com">Join Twitter Team</a>
+        </div>
+
+    </header>
+
+
+    <section class="hero">
+
+        <div class="hero-glow"></div>
+
+        <img src="logo1.png">
+
+        <h1>$LFG - Little Finger Guy</h1>
+
+        <p>
+            markets panic.<br>
+            little finger guy stays calm.
+        </p>
+
+    </section>
+    <section class="about-lfg" id="about">
+
+        <h2>About the Little Finger Guy</h2>
+
+        <p>
+            Little Finger Guy is the calm presence on the crypto timeline.
+            While markets panic and charts flash red, he simply watches with quiet confidence.
+            A tiny mascot reminding everyone that sometimes the best move is to stay calm and say… LFG.
+        </p>
+
+    </section>
+
+    <section class="section">
+
+        <div class="section-text">
+
+            Crypto timelines move fast.
+
+            <small>
+                charts flash red.<br>
+                notifications explode.
+            </small>
+
+            <small>
+                but little finger guy simply watches.
+            </small>
+
+        </div>
+
+        <img src="logo3.png">
+
+    </section>
+
+
+    <section class="section">
+
+        <img src="logo2_laptop.jpg">
+
+        <div class="section-text">
+
+            <div class="highlight">
+                While others panic sell…
+            </div>
+
+            <small>
+                little finger guy opens the laptop.
+            </small>
+
+            <small>
+                building.<br>
+                learning.<br>
+                shipping.
+            </small>
+
+        </div>
+
+    </section>
+
+
+    <section class="terminal" id="terminal">
+
+        <h3>LFG Terminal</h3>
+
+        <div id="terminalOutput">
+
+            <div class="terminal-line">> connecting to crypto timeline...</div>
+            <div class="terminal-line">> scanning market sentiment...</div>
+            <div class="terminal-line">> result: panic detected</div>
+            <div class="terminal-line">> little finger guy response: calm</div>
+
+        </div>
+
+        <div class="terminal-input">
+
+            <button onclick="runLFG()">Run $LFG Protocol</button>
+
+        </div>
+
+    </section>
+
+
+    <section class="twitter">
+
+        <div class="lfg-float" style="left:20px;top:10px;">👉</div>
+        <div class="lfg-float" style="right:20px;bottom:10px;">👉</div>
+
+        <h2>Join the LFG timeline</h2>
+
+        <p>
+            spread calm.<br>
+            spread the meme.<br>
+            little finger energy.
+        </p>
+
+        <a href="https://twitter.com">
+            FOLLOW ON X
+        </a>
+
+    </section>
+
+
+    <footer>
+
+        © $LFG
+
+    </footer>
+
+
+    <script>
+
+        /* BUBBLES */
+
+        const bubbleContainer = document.querySelector(".bubbles")
+
+        for (let i = 0; i < 25; i++) {
+
+            let b = document.createElement("div")
+            b.className = "bubble"
+
+            let size = Math.random() * 40 + 20
+
+            b.style.width = size + "px"
+            b.style.height = size + "px"
+            b.style.left = Math.random() * 100 + "%"
+            b.style.animationDuration = (Math.random() * 20 + 15) + "s"
+
+            bubbleContainer.appendChild(b)
+
+        }
+
+        /* HERO REVEAL */
+
+        const hero = document.querySelector(".hero")
+        setTimeout(() => hero.classList.add("show"), 200)
+
+        /* TERMINAL */
+
+        function runLFG() {
+
+            const lines = [
+                "> loading finger protocol...",
+                "> scanning markets...",
+                "> panic level: HIGH",
+                "> solution: LFG",
+                "> calm restored"
+            ]
+
+            const output = document.getElementById("terminalOutput")
+
+            lines.forEach((line, i) => {
+                setTimeout(() => {
+                    let div = document.createElement("div")
+                    div.className = "terminal-line"
+                    div.innerText = line
+                    output.appendChild(div)
+                }, i * 500)
+            })
+
+        }
+
+    </script>
+
+</body>
+
+</html>
